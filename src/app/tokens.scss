@@ -1,0 +1,25 @@
+// Design tokens for the Sadaka platform.
+// Palette is strict: background, brand green, soft green,
+// muted grey-blue, ink text, plus three pastel accents for SDG cards only.
+$bg: #f4efe7;
+$brand: #89ac76;
+$brand-dark: #5f8550;
+$soft-green: #ceecb6;
+$muted: #8c9dad;
+$ink: #302f2c;
+$card: #fffdf8;
+$line: #e4dccf;
+$sdg-pink: #f7e2f8;
+$sdg-blue: #bdeeff;
+$sdg-mint: #bdfff8;
+
+$radius-lg: 24px;
+$radius-md: 18px;
+$radius-sm: 12px;
+
+$font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+$font-body: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+$font-accent: 'Outfit', 'Cinzel', system-ui, sans-serif;
+
+$shadow-soft: 0 18px 50px rgba(48, 47, 44, 0.12);
+$shadow-card: 0 10px 30px rgba(48, 47, 44, 0.08);

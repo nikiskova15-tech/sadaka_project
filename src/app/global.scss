@@ -1,0 +1,33 @@
+// Global editorial styles, part 1: base + header + hero.
+@use './tokens' as *;
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: $bg; color: $ink; font-family: $font-body; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+h1, h2, h3, .display { font-family: $font-display; font-weight: 600; letter-spacing: 0.01em; }
+.page { max-width: 1220px; margin: 0 auto; padding: 40px 28px 80px; }
+.eyebrow { font-family: $font-accent; text-transform: uppercase; letter-spacing: 0.22em; font-size: 12px; color: $brand-dark; }
+.card { background: $card; border: 1px solid $line; border-radius: $radius-lg; box-shadow: $shadow-card; }
+.ant-btn-primary { background: $brand; box-shadow: none; font-family: $font-accent; letter-spacing: 0.04em; }
+.ant-btn-primary:hover { background: $brand-dark !important; }
+.ant-card { border-radius: $radius-lg !important; border-color: $line !important; }
+.ant-tag { border-radius: 999px; font-family: $font-accent; }
+.ant-input, .ant-select-selector, .ant-input-number { border-radius: 12px !important; }
+.ant-drawer-body { background: $bg; }
+.ant-modal-content { border-radius: 20px !important; }
+.header { position: sticky; top: 0; z-index: 50; background: rgba(244,239,231,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid $line; }
+.header-inner { max-width: 1220px; margin: 0 auto; padding: 12px 28px; display: flex; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand-mark { width: 44px; height: 44px; border-radius: 14px; background: $brand; display: grid; place-items: center; color: #fff; font-size: 24px; }
+.brand-name { font-family: $font-accent; font-weight: 700; letter-spacing: 0.28em; font-size: 18px; }
+.brand-sub { font-size: 11px; color: $muted; letter-spacing: 0.06em; }
+.nav { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.nav a { text-decoration: none; padding: 8px 14px; border-radius: 999px; font-family: $font-accent; font-size: 13px; }
+.nav a.active, .nav a:hover { background: $soft-green; }
+.lang-pill { border: 1px solid $line; border-radius: 999px; padding: 6px 12px; font-family: $font-accent; font-size: 12px; color: $muted; }
+.hero { position: relative; border-radius: 28px; overflow: hidden; min-height: 520px; display: flex; align-items: flex-end; color: #fff; box-shadow: $shadow-soft; background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1800&auto=format&fit=crop') center/cover; }
+.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,28,18,0.15), rgba(20,28,18,0.62)); }
+.hero-copy { position: relative; z-index: 1; padding: 48px; max-width: 640px; }
+.hero-copy h1 { font-size: clamp(42px, 6vw, 76px); line-height: 0.98; margin: 12px 0; }
+.hero-copy p { font-size: 18px; opacity: 0.92; }

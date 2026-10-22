@@ -1,0 +1,48 @@
+// Global styles part 2: sections, cards, map, responsive.
+@use './tokens' as *;
+
+.split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; margin-top: 40px; }
+.split .text-card { padding: 36px; font-size: 17px; line-height: 1.75; }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+.stat { background: $soft-green; border-radius: $radius-md; padding: 16px; text-align: center; }
+.stat b { display: block; font-size: 26px; font-family: $font-display; }
+.side-photo { border-radius: $radius-lg; min-height: 420px; object-fit: cover; width: 100%; box-shadow: $shadow-card; }
+.team-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+.team-card { display: grid; grid-template-columns: 220px 1fr; gap: 22px; padding: 22px; align-items: center; }
+.team-card img { width: 220px; height: 240px; object-fit: cover; border-radius: $radius-md; }
+.sdg-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.sdg { padding: 26px; border-radius: $radius-lg; border: 1px solid $line; }
+.sdg.pink { background: $sdg-pink; } .sdg.blue { background: $sdg-blue; } .sdg.mint { background: $sdg-mint; }
+.sdg h3 { margin: 8px 0; font-size: 28px; }
+.family-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 22px; }
+.family-card { overflow: hidden; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.family-card:hover { transform: translateY(-4px); box-shadow: $shadow-soft; }
+.family-card img { width: 100%; height: 180px; object-fit: cover; }
+.family-body { padding: 18px 18px 20px; }
+.progress { height: 8px; background: #ece4d6; border-radius: 999px; overflow: hidden; margin-top: 10px; }
+.progress i { display: block; height: 100%; background: $brand; }
+.filters { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px; }
+.search-hero { padding: 26px; margin-bottom: 18px; }
+.profile { display: grid; grid-template-columns: 1fr 380px; gap: 24px; }
+.profile-photo { width: 100%; height: 340px; object-fit: cover; border-radius: $radius-lg; }
+.help-box { padding: 24px; position: sticky; top: 90px; }
+.kg-map { position: relative; border-radius: $radius-lg; overflow: hidden; border: 1px solid $line; background: #eef3e6; min-height: 480px; }
+.pin { position: absolute; transform: translate(-50%, -100%); border: none; cursor: pointer; background: transparent; font-size: 26px; }
+.pin.active { transform: translate(-50%, -100%) scale(1.25); }
+.pin-label { display: block; font-size: 11px; background: #fff; border-radius: 8px; padding: 2px 6px; font-family: $font-accent; }
+.qr { width: 150px; height: 150px; border-radius: 14px; background: repeating-linear-gradient(45deg, #302f2c 0 6px, #fff 6px 12px); border: 8px solid #fff; }
+.auth-wrap { max-width: 480px; margin: 40px auto; padding: 32px; }
+.footer { margin-top: 70px; border-top: 1px solid $line; padding: 36px 28px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 20px; max-width: 1220px; margin-inline: auto; }
+.footer small { color: $muted; }
+@media (max-width: 1024px) {
+  .split, .profile { grid-template-columns: 1fr; }
+  .family-grid, .sdg-row { grid-template-columns: repeat(2, 1fr); }
+  .filters { grid-template-columns: 1fr 1fr; }
+  .team-card { grid-template-columns: 1fr; } .team-card img { width: 100%; }
+  .footer { grid-template-columns: 1fr; } .help-box { position: static; }
+}
+@media (max-width: 640px) {
+  .page { padding: 24px 16px 60px; } .header-inner { padding: 10px 16px; }
+  .hero-copy { padding: 26px; } .family-grid, .sdg-row { grid-template-columns: 1fr; }
+  .filters { grid-template-columns: 1fr; }
+}

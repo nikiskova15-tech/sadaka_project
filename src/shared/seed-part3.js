@@ -1,0 +1,50 @@
+// Seed data part 3: families 9-10.
+export const FAMILIES_PART3 = [
+  {
+    id: '1050',
+    displayId: 'Семья № 1050',
+    city: 'Кара-Балта',
+    address: 'ул. Токтогула, 56',
+    adults: 2,
+    children: 2,
+    members: [
+      { id: 'm1', name: 'Дмитрий', age: 33, gender: 'male', relation: 'father', registered: true },
+      { id: 'm2', name: 'Елена', age: 31, gender: 'female', relation: 'mother', registered: true },
+      { id: 'm3', name: 'Милана', age: 4, gender: 'female', relation: 'child', registered: false, clothingSize: '104' },
+      { id: 'm4', name: 'Кирилл', age: 10, gender: 'male', relation: 'child', registered: false, clothingSize: '140' },
+    ],
+    needs: [
+      { id: 'n1', label: 'Лекарства', category: 'medicine' },
+      { id: 'n2', label: 'Детская одежда', category: 'clothes' },
+      { id: 'n3', label: 'Молочные продукты', category: 'food' },
+    ],
+    comment: 'Папа восстанавливается после операции и пока не работает. Нужны лекарства и молочные продукты.',
+    verified: true,
+    monthlyHelpCount: 2,
+    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 44).toISOString(),
+    photo: 'https://images.unsplash.com/photo-1609220136736-443140cffec6?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: '1051',
+    displayId: 'Семья № 1051',
+    city: 'Токмок',
+    address: 'ул. Ибраимова, 90',
+    adults: 1,
+    children: 3,
+    members: [
+      { id: 'm1', name: 'Зарина', age: 27, gender: 'female', relation: 'mother', registered: true },
+      { id: 'm2', name: 'Амина', age: 2, gender: 'female', relation: 'child', registered: false, clothingSize: '92' },
+      { id: 'm3', name: 'Данияр', age: 5, gender: 'male', relation: 'child', registered: false, clothingSize: '110' },
+      { id: 'm4', name: 'Самира', age: 8, gender: 'female', relation: 'child', registered: false, clothingSize: '128' },
+    ],
+    needs: [
+      { id: 'n1', label: 'Подгузники и питание', category: 'baby', urgent: true },
+      { id: 'n2', label: 'Игрушки и книги', category: 'other' },
+    ],
+    comment: 'Молодая мама с тремя малышами. Младшей нужны подгузники и питание, старшим — книжки и тёплые вещи.',
+    verified: true,
+    monthlyHelpCount: 0,
+    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
+    photo: 'https://images.unsplash.com/photo-1543342384-1f1350e27861?q=80&w=800&auto=format&fit=crop',
+  },
+];
