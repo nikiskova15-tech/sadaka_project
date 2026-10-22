@@ -1,58 +1,47 @@
-// Axios instance with JWT interceptors + mock adapter wiring.
+// Axios instance with JWT + language interceptors, plus small helpers shared by the mock routes.
 import axios from 'axios';
-import { db, HELP_LIMIT, tokenFor, userFromAuth } from './mock-db.js';
-import { scoreFamily, inAgeBucket } from './mock-search.js';
+import { TOKEN_KEY, HELP_LIMIT } from './config.js';
+import { getLang } from './i18n/lang-state.js';
 
-export const TOKEN_KEY = 'sadaka_token';
-const LATENCY = 350;
-const clone = (v) => JSON.parse(JSON.stringify(v));
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-const okRes = (data, status = 200) => ({ data, status, statusText: 'OK', headers: {}, config: {} });
+export { TOKEN_KEY, HELP_LIMIT };
 
-function fail(message, code, status = 400) {
+export const api = axios.create({ baseURL: '/api' });
+
+// Every request carries the JWT (when present) and the current UI language.
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  config.headers['Accept-Language'] = getLang();
+  return config;
+});
+
+export const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const okRes = (data, status = 200) => ({ data, status, statusText: 'OK', headers: {}, config: {} });
+
+/** Throws an Axios-like error. The UI translates it by `code`; `message` is a technical fallback. */
+export function fail(message, code, status = 400) {
   const err = new Error(message);
   err.response = { data: { message, code }, status };
   err.code = code;
   throw err;
 }
 
-async function handle(config) {
-  await wait(LATENCY);
-  const method = (config.method || 'get').toLowerCase();
-  const url = new URL(config.url, 'http://mock');
-  const path = url.pathname;
-  const params = { ...(config.params || {}) };
-  let body = config.data;
-  if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
-
-  if (method === 'get' && path === '/families') {
-    let list = [...db.families];
-    const q = String(params.q || '').trim();
-    if (q) {
-      const scored = list.map((f) => ({ f, s: scoreFamily(f, q) })).filter((x) => x.s > 0);
-      scored.sort((a, b) => b.s - a.s);
-      list = scored.map((x) => x.f);
-    }
-    if (params.city) list = list.filter((f) => f.city === params.city);
-    if (params.age) list = list.filter((f) => f.members.some((m) => inAgeBucket(m.age, params.age)));
-    if (params.gender) list = list.filter((f) => f.members.some((m) => m.gender === params.gender));
-    if (!q) list.sort((a, b) => a.monthlyHelpCount - b.monthlyHelpCount || a.id.localeCompare(b.id));
-    return okRes(clone(list));
-  }
-  return fail('Not handled here', 'NOT_FOUND', 404);
+/** Returns the logged-in user or throws 401. */
+export function requireUser(req) {
+  if (!req.user) fail('Login required', 'UNAUTHORIZED', 401);
+  return req.user;
 }
 
-export const api = axios.create({ baseURL: '/api' });
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem(TOKEN_KEY);
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+export function apiErrorCode(err) {
+  return err?.response?.data?.code || err?.code || null;
+}
 
-export { db, HELP_LIMIT, tokenFor, userFromAuth, handle, fail, okRes };
+/** Technical fallback message. User-facing text is looked up by apiErrorCode() in the UI. */
 export function apiErrorMessage(err) {
-  return err?.response?.data?.message || err?.message || 'Что-то пошло не так';
+  return err?.response?.data?.message || err?.message || 'Unexpected error';
 }
+
 export function isHelpLimitError(err) {
-  return err?.response?.data?.code === 'HELP_LIMIT' || err?.code === 'HELP_LIMIT';
+  return apiErrorCode(err) === 'HELP_LIMIT';
 }

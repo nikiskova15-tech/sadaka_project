@@ -1,27 +1,39 @@
-// Final axios adapter: list routes + family routes + misc routes.
-import { api, handle, fail } from './client.js';
+// Final axios adapter: builds one request object and dispatches it to the route modules.
+import { api, fail, wait } from './client.js';
+import { userFromAuth } from './mock-db.js';
+import { readHeader } from './mock-serializers.js';
 import { handleFamilyRoutes } from './mock-family-routes.js';
 import { handleMiscRoutes } from './mock-misc-routes.js';
+import { LANGS, DEFAULT_LANG, MOCK_LATENCY_MS } from './config.js';
 
 api.defaults.adapter = async (config) => {
-  const method = (config.method || 'get').toLowerCase();
-  const url = new URL(config.url, 'http://mock');
-  const path = url.pathname;
-  const params = { ...(config.params || {}) };
-  let body = config.data;
-  if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+  await wait(MOCK_LATENCY_MS);
 
-  // Family list lives in client.js handle().
-  if (method === 'get' && path === '/families') {
-    const res = await handle(config);
-    return { ...res, config, headers: {} };
+  const url = new URL(config.url, 'http://mock');
+  let body = config.data;
+  if (typeof body === 'string') {
+    try {
+      body = JSON.parse(body);
+    } catch {
+      body = {};
+    }
   }
-  const fam = await handleFamilyRoutes(method, path, body, config);
-  if (fam) return { ...fam, config, headers: {} };
-  const misc = await handleMiscRoutes(method, path, params, body, config);
-  if (misc) return { ...misc, config, headers: {} };
-  return fail('Неизвестный маршрут', 'NOT_FOUND', 404);
+
+  const headerLang = String(readHeader(config.headers, 'Accept-Language') || '').slice(0, 2);
+  const req = {
+    method: (config.method || 'get').toLowerCase(),
+    path: url.pathname,
+    params: { ...(config.params || {}) },
+    body,
+    headers: config.headers,
+    lang: LANGS.includes(headerLang) ? headerLang : DEFAULT_LANG,
+    user: userFromAuth(config.headers),
+  };
+
+  const res = (await handleFamilyRoutes(req)) || (await handleMiscRoutes(req));
+  if (!res) fail('Route not found', 'NOT_FOUND', 404);
+  return { ...res, config, headers: {} };
 };
 
 export { api };
-export { TOKEN_KEY, apiErrorMessage, isHelpLimitError, HELP_LIMIT } from './client.js';
+export { TOKEN_KEY, HELP_LIMIT, apiErrorMessage, apiErrorCode, isHelpLimitError } from './client.js';
